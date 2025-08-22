@@ -6,44 +6,26 @@
   <title>Raden Cookies Checklist</title>
   <style>
     :root{
-      --bg:#0a2b1a; /* hijau tua */
-      --card:#0f3521;
-      --muted:#a6c2b5;
-      --text:#f4f7f5;
-      --accent:#d4b36a; /* emas */
-      --accent-2:#5aa7ff;
-      --ok:#32d583;
-      --warn:#f7a23a;
-      --bad:#ef4444;
-      --border:#244a36;
-      --shadow:0 6px 30px rgba(0,0,0,.25);
+      --bg:#0a2b1a; --card:#0f3521; --muted:#a6c2b5; --text:#f4f7f5;
+      --accent:#d4b36a; --ok:#32d583; --warn:#f7a23a; --bad:#ef4444; --border:#244a36; --shadow:0 6px 30px rgba(0,0,0,.25);
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
     .container{max-width:1100px;margin:0 auto;padding:16px}
     header{display:flex;align-items:center;gap:12px;padding:12px 0 4px}
-    header img{height:44px;width:auto}
-    header h1{margin:0;font-size:1.4rem;letter-spacing:.3px}
-    header .sub{color:var(--muted);margin:2px 0 0 0}
+    header h1{margin:0;font-size:1.4rem}
+    header .sub{color:var(--muted)}
     .card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--border);border-radius:16px;padding:14px;margin:14px 0;box-shadow:var(--shadow)}
     .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
     .btn{appearance:none;background:var(--accent);color:#0b0f0c;border:none;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.2)}
-    .btn:hover{filter:brightness(1.05)}
-    .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
-    .btn.small{padding:8px 12px}
-    .grid{display:grid;grid-template-columns:1fr;gap:14px}
-    @media(min-width:700px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media(min-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
-    .category header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-    .category h3{margin:0}
-    .muted{color:var(--muted)}
-    .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.78rem;font-weight:800;border:1px solid transparent}
-    .ok{background:rgba(50,213,131,.15);color:var(--ok);border-color:rgba(50,213,131,.35)}
-    .warn{background:rgba(247,162,58,.12);color:var(--warn);border-color:rgba(247,162,58,.35)}
-    .bad{background:rgba(239,68,68,.15);color:var(--bad);border-color:rgba(239,68,68,.35)}
-    input[type="text"],input[type="date"],input[type="password"]{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:#0d2f1d;color:var(--text);}
+    .btn.small{padding:8px 12px} .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+    input[type="text"],input[type="date"],input[type="password"]{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:#0d2f1d;color:var(--text)}
     .toggles{display:flex;gap:8px;flex-wrap:wrap}
     .toggle{display:flex;gap:8px;align-items:center;background:#0d2f1d;border:1px solid var(--border);padding:8px 12px;border-radius:12px}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px}
+    @media (min-width:700px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (min-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
+    .category header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
     .item{padding:8px 0;border-bottom:1px dashed var(--border)}
     .item:last-child{border-bottom:none}
     .item-row{display:grid;align-items:center;gap:8px;grid-template-columns:28px 28px 1fr minmax(120px,auto)}
@@ -51,21 +33,18 @@
     .thumb{height:58px;border-radius:8px;border:1px solid var(--border);cursor:pointer}
     label.file-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;border:1px solid var(--border);background:#0d2f1d;cursor:pointer}
     input[type="file"]{display:none}
-    .table{width:100%;border-collapse:collapse}
-    .table th,.table td{padding:10px;border-bottom:1px solid var(--border);text-align:left}
     .kartu{border:1px solid var(--border);border-radius:12px;padding:10px;margin:8px 0;background:#0f3521}
     .kartu h4{margin:0 0 6px 0}
     .photos-row{display:flex;gap:6px;flex-wrap:wrap}
-    .help{font-size:.9rem;color:var(--muted)}
+    .muted{color:var(--muted)}
+    .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.78rem;font-weight:800;border:1px solid rgba(255,255,255,.15)}
+    .warn{background:rgba(247,162,58,.12);color:var(--warn);border-color:rgba(247,162,58,.35)}
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <img id="brand-logo" alt="Raden Cookies" />
-      <div>
-        <h1>Raden Cookies Checklist</h1>
-      </div>
+      <h1>Raden Cookies Checklist</h1>
     </header>
 
     <section id="auth" class="card">
@@ -84,11 +63,9 @@
 
     <section id="user-app" class="card" style="display:none">
       <div class="row">
-        <div class="muted"><strong id="hello"></strong></div>
+        <div><strong id="hello"></strong></div>
         <div style="display:flex;gap:8px;align-items:end">
-          <label>Tanggal
-            <input id="work-date" type="date"/>
-          </label>
+          <label>Tanggal <input id="work-date" type="date"/></label>
           <button id="btn-today" class="btn ghost small">Hari ini</button>
           <button id="btn-logout" class="btn ghost small">Keluar</button>
         </div>
@@ -99,14 +76,14 @@
       </div>
       <div id="cats" class="grid"></div>
       <div class="row">
-        <div class="help">Semua item pada kategori yang dipilih harus dicentang. Item dengan label <span class="badge warn">foto wajib</span> harus ada fotonya.</div>
+        <div class="muted">Semua item pada kategori terpilih harus dicentang. Item berlabel <span class="badge warn">foto wajib</span> wajib ada fotonya.</div>
         <button id="btn-submit" class="btn">Tandai Selesai & Simpan ke Server</button>
       </div>
     </section>
 
     <section id="admin-app" class="card" style="display:none">
       <div class="row">
-        <div class="muted"><strong>Admin Panel</strong></div>
+        <div><strong>Admin Panel</strong></div>
         <div style="display:flex;gap:8px;align-items:end">
           <label>Dari <input id="from-date" type="date" /></label>
           <label>Sampai <input id="to-date" type="date" /></label>
@@ -117,77 +94,36 @@
     </section>
   </div>
 
-  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   /************ CONFIG ************/
-  const SUPABASE_URL = "https://ofxjfleedebeunvcbkcv.supabase.co"; // ganti
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9meGpmbGVlZGViZXVudmNia2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4NDQxMjIsImV4cCI6MjA3MTQyMDEyMn0.wxCH2Ftn5DelN4FjXoMXVLwi7zwLUzwRKyFYupo8MXM";               // ganti
-  const BUCKET = "photos"; // buat bucket public 'photos' di Supabase Storage
-
-  // Logo (inline) — kamu bisa ganti dengan URL logo kamu
-  const LOGO_DATAURL = ""; // kosongkan => sembunyikan
+  const SUPABASE_URL = "https://ofxjfleedebeunvcbkcv.supabase.co"; 
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9meGpmbGVlZGViZXVudmNia2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4NDQxMjIsImV4cCI6MjA3MTQyMDEyMn0.wxCH2Ftn5DelN4FjXoMXVLwi7zwLUzwRKyFYupo8MXM"; 
+  const BUCKET = "photos";                                      // pastikan ada bucket public 'photos'
+  const ADMIN_PIN = "raden1234";                                     // ganti PIN admin di sini
 
   /************ DATA MASTER ************/
   const CHECKLIST = {
     "General": [
-      "AC",
-      "Kulkas Freezer Utama",
-      "Komputer Mati",
-      "Laptop Mati",
-      "Rak Lemari Kuker Tertutup",
-      "Pintu Office Tertutup",
-      "Lampu dan Pintu Store",
-      "Sampah Office",
-      "Jendela Depan Toko Terkunci",
-      "Sampah Kulit Pisang masuk Freezer",
-      "Pintu Depan Utama",
-      "Pintu Garasi Depan Utama Tertutup",
-      "Semua Lantai Area Tersapu&Terpel",
-      "Semua Lantai Office&Store Bersih",
-      "Area Toko (Meja&Lantai) Rapi"
+      "AC","Kulkas Freezer Utama","Komputer Mati","Laptop Mati","Rak Lemari Kuker Tertutup",
+      "Pintu Office Tertutup","Lampu dan Pintu Store","Sampah Office","Jendela Depan Toko Terkunci",
+      "Sampah Kulit Pisang masuk Freezer","Pintu Depan Utama","Pintu Garasi Depan Utama Tertutup",
+      "Semua Lantai Area Tersapu&Terpel","Semua Lantai Office&Store Bersih","Area Toko (Meja&Lantai) Rapi"
     ],
     "Hot Kitchen": [
-      "Keran Gas Utama/Main Valve",
-      "Exhaust Tombol ON/OFF",
-      "Steamer Besar",
-      "Steamer Kecil",
-      "Kompor Gas",
-      "Tong Sampah Hot Kitchen",
-      "Selokan Hot Kitchen",
-      "Saringan Hot Kitchen Wasfatel (per 2 Hari)",
-      "Sampah Toilet Wanita",
-      "Jendela Toilet Wanita",
-      "Pintu Toilet Wanita",
-      "Kompor Bakar Depan Oven Besar",
-      "Kulkas Hot Kitchen",
-      "Mesin Cuci di Toilet Wanita",
-      "AC Dapur"
+      "Keran Gas Utama/Main Valve","Exhaust Tombol ON/OFF","Steamer Besar","Steamer Kecil","Kompor Gas",
+      "Tong Sampah Hot Kitchen","Selokan Hot Kitchen","Saringan Hot Kitchen Wasfatel (per 2 Hari)",
+      "Sampah Toilet Wanita","Jendela Toilet Wanita","Pintu Toilet Wanita","Kompor Bakar Depan Oven Besar",
+      "Kulkas Hot Kitchen","Mesin Cuci di Toilet Wanita","AC Dapur"
     ],
     "Pastry": [
-      "Oven Besar&Oven Kecil",
-      "Mesin Cap Label Kuker",
-      "Mesin Giling Kulit Bolen",
-      "Saringan Wastafel Cuci Piring (Per 2 Hari)",
-      "Mixer Besar Pastry",
-      "Mixer Kecil Pastry",
-      "Saringan Tepung",
-      "Kulkas Pastry",
-      "Tong Sampah Besar-Wastafel",
-      "Tong Sampah Kecil",
-      "Sampah Toilet Pria",
-      "Keran Gas Manual-Toilet Pria",
-      "Jendela Kamar Mandi Pria",
-      "Pintu Kamar Mandi Pria",
-      "Microwave",
-      "AC Dapur"
+      "Oven Besar&Oven Kecil","Mesin Cap Label Kuker","Mesin Giling Kulit Bolen",
+      "Saringan Wastafel Cuci Piring (Per 2 Hari)","Mixer Besar Pastry","Mixer Kecil Pastry","Saringan Tepung",
+      "Kulkas Pastry","Tong Sampah Besar-Wastafel","Tong Sampah Kecil","Sampah Toilet Pria",
+      "Keran Gas Manual-Toilet Pria","Jendela Kamar Mandi Pria","Pintu Kamar Mandi Pria","Microwave","AC Dapur"
     ]
   };
-  const REQUIRED_PHOTO_IDX = { // 1-based
-    "General": [1,2],
-    "Hot Kitchen": [1,5,13,15],
-    "Pastry": [8,12,16]
-  };
+  const REQUIRED_PHOTO_IDX = { "General":[1,2], "Hot Kitchen":[1,5,13,15], "Pastry":[8,12,16] }; // 1-based
 
   /************ INIT ************/
   const supabase = (SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length>10)
@@ -197,9 +133,6 @@
   const elAuth = document.getElementById("auth");
   const elUser = document.getElementById("user-app");
   const elAdmin = document.getElementById("admin-app");
-  const elLogo = document.getElementById("brand-logo");
-
-  if(LOGO_DATAURL){ elLogo.src = LOGO_DATAURL; } else { elLogo.style.display="none"; }
 
   document.getElementById("go-user").onclick = ()=>{
     const name = document.getElementById("username").value.trim();
@@ -209,11 +142,15 @@
     document.getElementById("work-date").value = todayStr();
     mountUser();
   };
+
   document.getElementById("go-admin").onclick = ()=>{
+    const pin = prompt("Masukkan PIN Admin:");
+    if(pin !== ADMIN_PIN){ alert("PIN salah."); return; }
     document.getElementById("from-date").value = todayStr(-6);
     document.getElementById("to-date").value = todayStr();
     mountAdmin();
   };
+
   document.getElementById("btn-logout").onclick = ()=>{
     state.user = null;
     elUser.style.display="none";
@@ -226,24 +163,10 @@
     renderCategories();
   };
 
-  function mountUser(){
-    elAuth.style.display="none";
-    elAdmin.style.display="none";
-    elUser.style.display="";
-    buildToggles();
-    renderCategories();
-  }
-  function mountAdmin(){
-    elAuth.style.display="none";
-    elUser.style.display="none";
-    elAdmin.style.display="";
-  }
+  function mountUser(){ elAuth.style.display="none"; elAdmin.style.display="none"; elUser.style.display=""; buildToggles(); renderCategories(); }
+  function mountAdmin(){ elAuth.style.display="none"; elUser.style.display="none"; elAdmin.style.display=""; }
 
-  const state = {
-    user:null,
-    enabledCats: new Set(Object.keys(CHECKLIST)),
-    photos: {} // key: cat|idx -> [File or Blob previews]
-  };
+  const state = { user:null, enabledCats: new Set(Object.keys(CHECKLIST)), photos:{} };
 
   function todayStr(offsetDays=0){
     const d = new Date(); d.setDate(d.getDate()+offsetDays); d.setHours(12,0,0,0);
@@ -251,11 +174,9 @@
   }
 
   function buildToggles(){
-    const wrap = document.getElementById("cat-toggles");
-    wrap.innerHTML = "";
+    const wrap = document.getElementById("cat-toggles"); wrap.innerHTML="";
     Object.keys(CHECKLIST).forEach(cat=>{
-      const label = document.createElement("label");
-      label.className="toggle";
+      const label = document.createElement("label"); label.className="toggle";
       const cb = document.createElement("input"); cb.type="checkbox"; cb.checked = state.enabledCats.has(cat);
       cb.onchange = ()=>{
         if(cb.checked) state.enabledCats.add(cat); else state.enabledCats.delete(cat);
@@ -263,224 +184,122 @@
         renderCategories();
       };
       const span = document.createElement("span"); span.textContent = cat;
-      label.appendChild(cb); label.appendChild(span);
-      wrap.appendChild(label);
+      label.appendChild(cb); label.appendChild(span); wrap.appendChild(label);
     });
   }
 
   function renderCategories(){
-    const wrap = document.getElementById("cats");
-    wrap.innerHTML = "";
+    const wrap = document.getElementById("cats"); wrap.innerHTML="";
     Object.keys(CHECKLIST).forEach(cat=>{
       if(!state.enabledCats.has(cat)) return;
-      const card = document.createElement("section");
-      card.className="category card";
-      const head = document.createElement("header");
-      head.innerHTML = `<h3>${cat}</h3><div class="muted">Semua item wajib dicentang</div>`;
-      card.appendChild(head);
-
-      CHECKLIST[cat].forEach((name, i)=>{
-        const idx = i+1;
-        const row = document.createElement("div");
-        row.className = "item";
-        const inner = document.createElement("div");
-        inner.className = "item-row";
-
-        const cbWrap = document.createElement("div");
-        cbWrap.style.textAlign="center";
-        const cb = document.createElement("input");
-        cb.type="checkbox"; cb.id = `cb_${cat}_${idx}`;
-        cbWrap.appendChild(cb);
-
-        const num = document.createElement("div"); num.textContent = idx; num.style.fontWeight="800";
-        const nm = document.createElement("div"); nm.textContent = name;
-
-        const upWrap = document.createElement("div");
-        const fileId = `file_${cat}_${idx}`.replace(/\s+/g,'_');
-        const input = document.createElement("input");
-        input.type="file"; input.accept="image/*"; input.multiple=true; input.id=fileId;
-        const label = document.createElement("label"); label.className="file-btn"; label.htmlFor=fileId; label.textContent="Upload Foto";
+      const card = document.createElement("section"); card.className="category card";
+      const head = document.createElement("header"); head.innerHTML = `<h3>${cat}</h3><div class="muted">Semua item wajib dicentang</div>`; card.appendChild(head);
+      CHECKLIST[cat].forEach((name,i)=>{
+        const idx=i+1;
+        const row=document.createElement("div"); row.className="item";
+        const inner=document.createElement("div"); inner.className="item-row";
+        const cbWrap=document.createElement("div"); const cb=document.createElement("input"); cb.type="checkbox"; cb.id=`cb_${cat}_${idx}`; cbWrap.appendChild(cb);
+        const num=document.createElement("div"); num.textContent=idx; num.style.fontWeight="800";
+        const nm=document.createElement("div"); nm.textContent=name;
+        const upWrap=document.createElement("div"); const fileId=`file_${cat}_${idx}`.replace(/\s+/g,'_');
+        const input=document.createElement("input"); input.type="file"; input.accept="image/*"; input.multiple=true; input.id=fileId;
+        const label=document.createElement("label"); label.className="file-btn"; label.htmlFor=fileId; label.textContent="Upload Foto";
         upWrap.appendChild(label); upWrap.appendChild(input);
-
-        inner.appendChild(cbWrap); inner.appendChild(num); inner.appendChild(nm); inner.appendChild(upWrap);
-        row.appendChild(inner);
-
-        const photosDiv = document.createElement("div");
-        photosDiv.className = "item-photos";
-        row.appendChild(photosDiv);
-
-        input.onchange = async ()=>{
-          const files = Array.from(input.files);
-          const out = [];
-          for(const f of files){
-            const blob = await compressImage(f, 1600, 0.85);
-            const url = URL.createObjectURL(blob);
-            const img = document.createElement("img");
-            img.className="thumb"; img.src = url;
-            photosDiv.appendChild(img);
-            out.push(blob);
-          }
-          state.photos[`${cat}|${idx}`] = (state.photos[`${cat}|${idx}`]||[]).concat(out);
-          input.value = "";
+        inner.appendChild(cbWrap); inner.appendChild(num); inner.appendChild(nm); inner.appendChild(upWrap); row.appendChild(inner);
+        const photosDiv=document.createElement("div"); photosDiv.className="item-photos"; row.appendChild(photosDiv);
+        input.onchange=async ()=>{
+          const files=[...input.files]; const out=[];
+          for(const f of files){ const blob=await compressImage(f,1600,0.85); const url=URL.createObjectURL(blob); const img=document.createElement("img"); img.className="thumb"; img.src=url; photosDiv.appendChild(img); out.push(blob); }
+          state.photos[`${cat}|${idx}`]=(state.photos[`${cat}|${idx}`]||[]).concat(out); input.value="";
         };
-
-        // badge foto wajib
-        if((REQUIRED_PHOTO_IDX[cat]||[]).includes(idx)){
-          const badge = document.createElement("span");
-          badge.className="badge warn";
-          badge.textContent="foto wajib";
-          row.appendChild(badge);
-        }
-
+        if((REQUIRED_PHOTO_IDX[cat]||[]).includes(idx)){ const badge=document.createElement("span"); badge.className="badge warn"; badge.textContent="foto wajib"; row.appendChild(badge); }
         card.appendChild(row);
       });
-
       wrap.appendChild(card);
     });
   }
 
   async function compressImage(file, maxDim=1600, quality=0.85){
-    const img = new Image();
-    const url = URL.createObjectURL(file);
+    const img=new Image(); const url=URL.createObjectURL(file);
     await new Promise((res,rej)=>{ img.onload=res; img.onerror=rej; img.src=url; });
-    let {width:w, height:h} = img;
-    const ratio = Math.min(maxDim/w, maxDim/h, 1);
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.round(w*ratio);
-    canvas.height = Math.round(h*ratio);
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    return await new Promise(r=> canvas.toBlob(b=>{ URL.revokeObjectURL(url); r(b); }, "image/jpeg", quality));
+    let w=img.width, h=img.height; const ratio=Math.min(maxDim/w, maxDim/h, 1);
+    const canvas=document.createElement("canvas"); canvas.width=Math.round(w*ratio); canvas.height=Math.round(h*ratio);
+    const ctx=canvas.getContext("2d"); ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    return await new Promise(r=>canvas.toBlob(b=>{ URL.revokeObjectURL(url); r(b); },"image/jpeg",quality));
   }
 
   document.getElementById("btn-submit").onclick = async ()=>{
-    const name = state.user;
-    const date = document.getElementById("work-date").value;
-    if(!name) return alert("Nama user kosong.");
-    if(!date) return alert("Tanggal belum diisi.");
+    const name=state.user; const date=document.getElementById("work-date").value;
+    if(!name) return alert("Nama user kosong."); if(!date) return alert("Tanggal belum diisi.");
 
-    // Validasi: semua item dicentang pada kategori yang dipilih, dan foto wajib harus ada
-    const errs = [];
-    const payload = {};
+    // Validasi per kategori
+    const errs=[]; const payload={};
     for(const cat of Object.keys(CHECKLIST)){
       if(!state.enabledCats.has(cat)) continue;
-      const arr = CHECKLIST[cat];
-      let done = 0;
-      const req = new Set(REQUIRED_PHOTO_IDX[cat]||[]);
-      let reqMissing = 0;
-      const items = [];
-      for(let i=0;i<arr.length;i++){
-        const idx = i+1;
-        const cb = document.getElementById(`cb_${cat}_${idx}`);
-        const checked = cb && cb.checked;
-        items.push({i:idx, text:arr[i], checked});
-        if(checked) done++; 
-        if(req.has(idx)){
-          const pics = state.photos[`${cat}|${idx}`]||[];
-          if(pics.length===0) reqMissing++;
-        }
-      }
-      if(done < arr.length) errs.push(`• ${cat}: semua item harus dicentang (${done}/${arr.length}).`);
+      const arr=CHECKLIST[cat]; let done=0; const req=new Set(REQUIRED_PHOTO_IDX[cat]||[]); let reqMissing=0;
+      for(let i=0;i<arr.length;i++){ const idx=i+1; const checked=document.getElementById(`cb_${cat}_${idx}`)?.checked; if(checked) done++; if(req.has(idx)){ const pics=state.photos[`${cat}|${idx}`]||[]; if(pics.length===0) reqMissing++; } }
+      if(done<arr.length) errs.push(`• ${cat}: semua item harus dicentang (${done}/${arr.length}).`);
       if(reqMissing>0) errs.push(`• ${cat}: kurang foto wajib (${reqMissing} item).`);
-      payload[cat] = { done, total:arr.length };
+      payload[cat]={done,total:arr.length};
     }
     if(errs.length){ alert("Tidak bisa submit:\n"+errs.join("\n")); return; }
 
-    // Upload foto ke Storage (jika supabase tersedia)
-    let uploadedMap = {};
+    // Upload foto ke Storage (jika supabase tersedia), bangun peta uploads
+    let uploadedMap={};
     if(supabase){
       for(const key of Object.keys(state.photos)){
-        const [cat, idx] = key.split("|");
-        const blobs = state.photos[key];
-        const uploads = [];
+        const [cat, idx]=key.split("|"); const blobs=state.photos[key]; const uploads=[];
         for(const blob of blobs){
-          const path = `${encodeURIComponent(name)}/${date}/${encodeURIComponent(cat)}/${idx}-${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
-          const { data, error } = await supabase.storage.from(BUCKET).upload(path, blob, { contentType:"image/jpeg", upsert:false });
+          const path=`${encodeURIComponent(name)}/${date}/${encodeURIComponent(cat)}/${idx}-${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
+          const { error } = await supabase.storage.from(BUCKET).upload(path, blob, { contentType:"image/jpeg", upsert:false });
           if(error){ console.warn("Upload error", error); }
           const { data:pub } = supabase.storage.from(BUCKET).getPublicUrl(path);
-          uploads.push({ path, url: pub.publicUrl });
+          uploads.push({ item:Number(idx), path, url: pub.publicUrl });
         }
-        uploadedMap[key] = uploads;
+        uploadedMap[key]=uploads;
       }
     }
 
-    // Simpan metadata per kategori ke tabel
+    // Simpan metadata per kategori
     if(supabase){
-      const rows = [];
+      const rows=[];
       for(const cat of Object.keys(CHECKLIST)){
         if(!state.enabledCats.has(cat)) continue;
-        const arr = CHECKLIST[cat];
-        const done = payload[cat].done;
-        const total = payload[cat].total;
-        // kalkulasi missing photos per kategori
-        const req = new Set(REQUIRED_PHOTO_IDX[cat]||[]);
-        let miss = 0;
-        for(let i=1;i<=arr.length;i++){
-          if(req.has(i)){
-            const up = uploadedMap[`${cat}|${i}`]||[];
-            if(up.length===0) miss++;
-          }
-        }
-        // kumpulkan semua url foto dari kategori ini
-        const ups = [];
-        for(let i=1;i<=arr.length;i++){
-          const arrUp = uploadedMap[`${cat}|${i}`]||[];
-          arrUp.forEach(u=> ups.push({ item:i, url:u.url, path:u.path }));
-        }
-        rows.push({
-          user: name, date, category: cat,
-          total, done, missing_photos: miss,
-          uploads: ups, payload: { checks: "all-true", required: Array.from(req) }
-        });
+        const arr=CHECKLIST[cat]; const done=payload[cat].done; const total=payload[cat].total;
+        const req=new Set(REQUIRED_PHOTO_IDX[cat]||[]); let miss=0; const ups=[];
+        for(let i=1;i<=arr.length;i++){ if(req.has(i)){ const u=uploadedMap[`${cat}|${i}`]||[]; if(u.length===0) miss++; } (uploadedMap[`${cat}|${i}`]||[]).forEach(x=>ups.push(x)); }
+        rows.push({ user:name, date, category:cat, total, done, missing_photos:miss, uploads:ups, payload:{ checks:"all-true", required:[...req] } });
       }
       const { error } = await supabase.from("checks").insert(rows);
       if(error){ alert("Gagal menyimpan metadata: "+error.message); return; }
       alert("✅ Tersimpan ke server.");
     }else{
-      // fallback local export
-      const data = { meta:{ exportedAt:new Date().toISOString(), app:"v6.1-fallback" }, user:name, date, uploadedMap };
-      const blob = new Blob([JSON.stringify(data)], {type:"application/json"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a"); a.href = url; a.download = `fallback_${name}_${date}.json`; a.click();
+      // fallback export lokal
+      const data={ meta:{ exportedAt:new Date().toISOString(), app:"v6.1.1-fallback" }, user:name, date };
+      const blob=new Blob([JSON.stringify(data)],{type:"application/json"});
+      const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=`fallback_${name}_${date}.json`; a.click();
       alert("⚠️ Supabase belum diset. Data diexport lokal.");
     }
-
-    // reset photo state setelah submit
-    state.photos = {};
+    state.photos={};
   };
 
   document.getElementById("btn-load").onclick = async ()=>{
-    if(!supabase){ return alert("Supabase belum dikonfigurasi."); }
-    const f = document.getElementById("from-date").value;
-    const t = document.getElementById("to-date").value;
-    const { data, error } = await supabase
-      .from("checks")
-      .select("*")
-      .gte("date", f)
-      .lte("date", t)
-      .order("submitted_at", { ascending:false });
+    if(!supabase) return alert("Supabase belum dikonfigurasi.");
+    const f=document.getElementById("from-date").value; const t=document.getElementById("to-date").value;
+    const { data, error } = await supabase.from("checks").select("*").gte("date", f).lte("date", t).order("submitted_at",{ascending:false});
     if(error){ alert("Gagal memuat: "+error.message); return; }
     renderAdmin(data||[]);
   };
 
   function renderAdmin(rows){
-    const box = document.getElementById("admin-list");
-    box.innerHTML = "";
-    if(rows.length===0){ box.innerHTML = '<div class="muted">Tidak ada data.</div>'; return; }
+    const box=document.getElementById("admin-list"); box.innerHTML="";
+    if(rows.length===0){ box.innerHTML='<div class="muted">Tidak ada data.</div>'; return; }
     rows.forEach(r=>{
-      const div = document.createElement("div");
-      div.className="kartu";
-      div.innerHTML = `<h4>${r.user} — ${r.date} — ${r.category}</h4>
-        <div class="muted">Progress: ${r.done}/${r.total} · Foto wajib kurang: ${r.missing_photos}</div>`;
-      const photos = document.createElement("div");
-      photos.className="photos-row";
-      (r.uploads||[]).forEach(u=>{
-        const img = document.createElement("img");
-        img.className="thumb"; img.src = u.url; img.title = `Item ${u.item}`;
-        photos.appendChild(img);
-      });
-      div.appendChild(photos);
-      box.appendChild(div);
+      const div=document.createElement("div"); div.className="kartu";
+      div.innerHTML=`<h4>${r.user} — ${r.date} — ${r.category}</h4><div class="muted">Progress: ${r.done}/${r.total} · Foto wajib kurang: ${r.missing_photos}</div>`;
+      const photos=document.createElement("div"); photos.className="photos-row";
+      (r.uploads||[]).forEach(u=>{ const img=document.createElement("img"); img.className="thumb"; img.src=u.url; img.title=`Item ${u.item}`; photos.appendChild(img); });
+      div.appendChild(photos); box.appendChild(div);
     });
   }
   </script>
