@@ -51,7 +51,7 @@ body{
 header.brand{display:flex; align-items:center; justify-content:space-between; padding:18px 0 10px; position:relative;}
 .brand-left{display:flex; align-items:center; gap:12px}
 .logo{width:64px; height:64px; object-fit:contain; border-radius:12px; border:1px solid var(--border); background:#0d2f1d; padding:8px; box-shadow:var(--shadow);}
-.brand-accent{height:2px; background:linear-gradient(90deg, transparent, var(--accent), transparent); width:44%; border-radius:2px}
+.brand-accent{height:2px; background:linear-gradient(90deg, transparent, var(--accent), transparent); width:20%; border-radius:2px}
 
 /* Buttons */
 .btn{background: linear-gradient(180deg, #e7ce8d, #c8a356); color:#102015; border:1px solid #b08c44;}
@@ -91,6 +91,7 @@ label.file-btn{border-color:#1e3d2a}
 }
 
   </style>
+
 </head>
 <body>
   <div class="container">
@@ -108,9 +109,7 @@ label.file-btn{border-color:#1e3d2a}
     <section id="auth" class="card">
       <div class="row">
         <div style="flex:1;min-width:260px">
-          <label>Nama User
-            <input id="username" type="text" placeholder="mis. budi" />
-          </label>
+            <input id="username" type="text" placeholder="Nama User" />
         </div>
         <div style="display:flex;gap:8px;align-items:flex-end">
           <button id="go-user" class="btn">Masuk User</button>
@@ -142,11 +141,13 @@ label.file-btn{border-color:#1e3d2a}
     <section id="admin-app" class="card" style="display:none">
       <div class="row">
         <div><strong>Admin Panel</strong></div>
-        <div style="display:flex;gap:8px;align-items:end">
+        <div style="display:flex;gap:0px;align-items:end">
           <label>Dari <input id="from-date" type="date" /></label>
           <label>Sampai <input id="to-date" type="date" /></label>
-          <button id="btn-load" class="btn">Muat Data</button>
-          <button id="btn-logout-2" class="btn ghost">Keluar</button>
+		  <div style="display:flex;gap:8px;align-items:end">
+			  <button id="btn-load" class="btn">Load</button>
+			  <button id="btn-logout-2" class="btn ghost">Back</button>
+		  </div>
         </div>
       </div>
       <div id="admin-list"></div>
@@ -184,7 +185,7 @@ label.file-btn{border-color:#1e3d2a}
   document.getElementById("go-admin").onclick = ()=>{
     const pin = prompt("Masukkan PIN Admin:");
     if(pin !== ADMIN_PIN){ alert("PIN salah."); return; }
-    document.getElementById("from-date").value = todayStr(-6);
+    document.getElementById("from-date").value = todayStr();
     document.getElementById("to-date").value = todayStr();
     mountAdmin();
   };
@@ -261,6 +262,14 @@ label.file-btn{border-color:#1e3d2a}
     const ctx=canvas.getContext("2d"); ctx.drawImage(img,0,0,canvas.width,canvas.height);
     return await new Promise(r=>canvas.toBlob(b=>{ URL.revokeObjectURL(url); r(b); },"image/jpeg",quality));
   }
+  
+  // ubah spasi -> "-", hapus karakter aneh biar aman untuk storage keys
+  function safeKey(s){
+	return String(s)
+	  .trim()
+	  .replace(/\s+/g, '-')       // spasi -> dash
+	  .replace(/[^A-Za-z0-9._/-]/g, ''); // buang karakter yg berisiko
+  }
 
   document.getElementById("btn-submit").onclick = async ()=>{
     const name=state.user; const date=document.getElementById("work-date").value;
@@ -295,7 +304,9 @@ label.file-btn{border-color:#1e3d2a}
         const blobs=state.photos[key];
         const uploads=[];
         for(const blob of blobs){
-          const path=`${encodeURIComponent(name)}/${date}/${encodeURIComponent(cat)}/${idx}-${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
+		  const userSafe = safeKey(name);
+		  const catSafe  = safeKey(cat);
+		  const path = `${userSafe}/${date}/${catSafe}/${idx}-${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
           const { error } = await supabase.storage.from(BUCKET).upload(path, blob, { contentType:"image/jpeg", upsert:false });
           if(error){ console.warn("Upload error", error); }
           const { data:pub } = supabase.storage.from(BUCKET).getPublicUrl(path);
