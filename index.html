@@ -28,7 +28,7 @@
     .category header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
     .item{padding:8px 0;border-bottom:1px dashed var(--border)}
     .item:last-child{border-bottom:none}
-    .item-row{display:grid;align-items:center;gap:8px;grid-template-columns:28px 28px 1fr minmax(120px,auto)}
+    .item-row{display:grid;align-items:center;gap:8px;grid-template-columns:28px 28px 1fr minmax(80px,auto)}
     .item-photos{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
     .thumb{height:58px;border-radius:8px;border:1px solid var(--border);cursor:pointer}
     label.file-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;border:1px solid var(--border);background:#0d2f1d;cursor:pointer}
@@ -228,7 +228,7 @@ label.file-btn{border-color:#1e3d2a}
     Object.keys(CHECKLIST).forEach(cat=>{
       if(!state.enabledCats.has(cat)) return;
       const card = document.createElement("section"); card.className="category card";
-      const head = document.createElement("header"); head.innerHTML = `<h3>${cat}</h3><div class="muted">Semua item wajib dicentang</div>`; card.appendChild(head);
+      const head = document.createElement("header"); head.innerHTML = `<h3>${cat}</h3>`; card.appendChild(head);
       CHECKLIST[cat].forEach((name,i)=>{
         const idx=i+1;
         const row=document.createElement("div"); row.className="item";
@@ -238,7 +238,7 @@ label.file-btn{border-color:#1e3d2a}
         const nm=document.createElement("div"); nm.textContent=name;
         const upWrap=document.createElement("div"); const fileId=`file_${cat}_${idx}`.replace(/\s+/g,'_');
         const input=document.createElement("input"); input.type="file"; input.accept="image/*"; input.multiple=true; input.id=fileId;
-        const label=document.createElement("label"); label.className="file-btn"; label.htmlFor=fileId; label.textContent="Upload Foto";
+        const label=document.createElement("label"); label.className="file-btn"; label.htmlFor=fileId; label.textContent="Upload";
         upWrap.appendChild(label); upWrap.appendChild(input);
         inner.appendChild(cbWrap); inner.appendChild(num); inner.appendChild(nm); inner.appendChild(upWrap); row.appendChild(inner);
         const photosDiv=document.createElement("div"); photosDiv.className="item-photos"; row.appendChild(photosDiv);
