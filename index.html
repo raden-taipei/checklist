@@ -39,6 +39,10 @@
     .muted{color:var(--muted)}
     .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.78rem;font-weight:800;border:1px solid rgba(255,255,255,.15)}
     .warn{background:rgba(247,162,58,.12);color:var(--warn);border-color:rgba(247,162,58,.35)}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999}
+    .modal{background:#0f3521;color:#f4f7f5;border:1px solid #244a36;border-radius:12px;padding:16px;max-width:900px;width:95%;max-height:80vh;overflow:auto;box-shadow:0 6px 30px rgba(0,0,0,.25)}
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{padding:10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
   </style>
 </head>
 <body>
@@ -88,7 +92,7 @@
           <label>Dari <input id="from-date" type="date" /></label>
           <label>Sampai <input id="to-date" type="date" /></label>
           <button id="btn-load" class="btn">Muat Data</button>
-		  <button id="btn-logout-2" class="btn ghost">Keluar</button>
+          <button id="btn-logout-2" class="btn ghost">Keluar</button>
         </div>
       </div>
       <div id="admin-list"></div>
@@ -97,39 +101,19 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-  /************ CONFIG ************/
   const SUPABASE_URL = "https://ofxjfleedebeunvcbkcv.supabase.co"; 
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9meGpmbGVlZGViZXVudmNia2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4NDQxMjIsImV4cCI6MjA3MTQyMDEyMn0.wxCH2Ftn5DelN4FjXoMXVLwi7zwLUzwRKyFYupo8MXM"; 
   const BUCKET = "photos";                                      // pastikan ada bucket public 'photos'
   const ADMIN_PIN = "raden1234";                                     // ganti PIN admin di sini
 
-  /************ DATA MASTER ************/
   const CHECKLIST = {
-    "General": [
-      "AC","Kulkas Freezer Utama","Komputer Mati","Laptop Mati","Rak Lemari Kuker Tertutup",
-      "Pintu Office Tertutup","Lampu dan Pintu Store","Sampah Office","Jendela Depan Toko Terkunci",
-      "Sampah Kulit Pisang masuk Freezer","Pintu Depan Utama","Pintu Garasi Depan Utama Tertutup",
-      "Semua Lantai Area Tersapu&Terpel","Semua Lantai Office&Store Bersih","Area Toko (Meja&Lantai) Rapi"
-    ],
-    "Hot Kitchen": [
-      "Keran Gas Utama/Main Valve","Exhaust Tombol ON/OFF","Steamer Besar","Steamer Kecil","Kompor Gas",
-      "Tong Sampah Hot Kitchen","Selokan Hot Kitchen","Saringan Hot Kitchen Wasfatel (per 2 Hari)",
-      "Sampah Toilet Wanita","Jendela Toilet Wanita","Pintu Toilet Wanita","Kompor Bakar Depan Oven Besar",
-      "Kulkas Hot Kitchen","Mesin Cuci di Toilet Wanita","AC Dapur"
-    ],
-    "Pastry": [
-      "Oven Besar&Oven Kecil","Mesin Cap Label Kuker","Mesin Giling Kulit Bolen",
-      "Saringan Wastafel Cuci Piring (Per 2 Hari)","Mixer Besar Pastry","Mixer Kecil Pastry","Saringan Tepung",
-      "Kulkas Pastry","Tong Sampah Besar-Wastafel","Tong Sampah Kecil","Sampah Toilet Pria",
-      "Keran Gas Manual-Toilet Pria","Jendela Kamar Mandi Pria","Pintu Kamar Mandi Pria","Microwave","AC Dapur"
-    ]
+    "General": ["AC","Kulkas Freezer Utama","Komputer Mati","Laptop Mati","Rak Lemari Kuker Tertutup","Pintu Office Tertutup","Lampu dan Pintu Store","Sampah Office","Jendela Depan Toko Terkunci","Sampah Kulit Pisang masuk Freezer","Pintu Depan Utama","Pintu Garasi Depan Utama Tertutup","Semua Lantai Area Tersapu&Terpel","Semua Lantai Office&Store Bersih","Area Toko (Meja&Lantai) Rapi"],
+    "Hot Kitchen": ["Keran Gas Utama/Main Valve","Exhaust Tombol ON/OFF","Steamer Besar","Steamer Kecil","Kompor Gas","Tong Sampah Hot Kitchen","Selokan Hot Kitchen","Saringan Hot Kitchen Wasfatel (per 2 Hari)","Sampah Toilet Wanita","Jendela Toilet Wanita","Pintu Toilet Wanita","Kompor Bakar Depan Oven Besar","Kulkas Hot Kitchen","Mesin Cuci di Toilet Wanita","AC Dapur"],
+    "Pastry": ["Oven Besar&Oven Kecil","Mesin Cap Label Kuker","Mesin Giling Kulit Bolen","Saringan Wastafel Cuci Piring (Per 2 Hari)","Mixer Besar Pastry","Mixer Kecil Pastry","Saringan Tepung","Kulkas Pastry","Tong Sampah Besar-Wastafel","Tong Sampah Kecil","Sampah Toilet Pria","Keran Gas Manual-Toilet Pria","Jendela Kamar Mandi Pria","Pintu Kamar Mandi Pria","Microwave","AC Dapur"]
   };
-  const REQUIRED_PHOTO_IDX = { "General":[1,2], "Hot Kitchen":[1,5,13,15], "Pastry":[8,12,16] }; // 1-based
+  const REQUIRED_PHOTO_IDX = { "General":[1,2], "Hot Kitchen":[1,5,13,15], "Pastry":[8,12,16] };
 
-  /************ INIT ************/
-  const supabase = (SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length>10)
-    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-    : null;
+  const supabase = (SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length>10) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
   const elAuth = document.getElementById("auth");
   const elUser = document.getElementById("user-app");
@@ -143,7 +127,6 @@
     document.getElementById("work-date").value = todayStr();
     mountUser();
   };
-
   document.getElementById("go-admin").onclick = ()=>{
     const pin = prompt("Masukkan PIN Admin:");
     if(pin !== ADMIN_PIN){ alert("PIN salah."); return; }
@@ -151,28 +134,24 @@
     document.getElementById("to-date").value = todayStr();
     mountAdmin();
   };
+  document.getElementById("btn-logout").onclick = ()=>{ logoutToAuth(); };
+  document.getElementById("btn-logout-2").onclick = ()=>{ logoutToAuth(); };
+  document.getElementById("btn-today").onclick = ()=>{ document.getElementById("work-date").value = todayStr(); renderCategories(); };
 
-  document.getElementById("btn-logout").onclick = ()=>{
+  function logoutToAuth(){
     state.user = null;
     elUser.style.display="none";
     elAdmin.style.display="none";
     elAuth.style.display="";
     document.getElementById("username").value="";
-  };
-  document.getElementById("btn-today").onclick = ()=>{
-    document.getElementById("work-date").value = todayStr();
-    renderCategories();
-  };
+  }
 
   function mountUser(){ elAuth.style.display="none"; elAdmin.style.display="none"; elUser.style.display=""; buildToggles(); renderCategories(); }
   function mountAdmin(){ elAuth.style.display="none"; elUser.style.display="none"; elAdmin.style.display=""; }
 
   const state = { user:null, enabledCats: new Set(Object.keys(CHECKLIST)), photos:{} };
 
-  function todayStr(offsetDays=0){
-    const d = new Date(); d.setDate(d.getDate()+offsetDays); d.setHours(12,0,0,0);
-    return d.toISOString().slice(0,10);
-  }
+  function todayStr(offsetDays=0){ const d=new Date(); d.setDate(d.getDate()+offsetDays); d.setHours(12,0,0,0); return d.toISOString().slice(0,10); }
 
   function buildToggles(){
     const wrap = document.getElementById("cat-toggles"); wrap.innerHTML="";
@@ -233,23 +212,34 @@
     const name=state.user; const date=document.getElementById("work-date").value;
     if(!name) return alert("Nama user kosong."); if(!date) return alert("Tanggal belum diisi.");
 
-    // Validasi per kategori
-    const errs=[]; const payload={};
+    // Validasi + detail per kategori
+    const errs=[]; const detailByCategory={};
     for(const cat of Object.keys(CHECKLIST)){
       if(!state.enabledCats.has(cat)) continue;
-      const arr=CHECKLIST[cat]; let done=0; const req=new Set(REQUIRED_PHOTO_IDX[cat]||[]); let reqMissing=0;
-      for(let i=0;i<arr.length;i++){ const idx=i+1; const checked=document.getElementById(`cb_${cat}_${idx}`)?.checked; if(checked) done++; if(req.has(idx)){ const pics=state.photos[`${cat}|${idx}`]||[]; if(pics.length===0) reqMissing++; } }
+      const arr=CHECKLIST[cat];
+      let done=0; const req=new Set(REQUIRED_PHOTO_IDX[cat]||[]); let reqMissing=0;
+      const items=[];
+      for(let i=0;i<arr.length;i++){
+        const idx=i+1;
+        const checked=!!document.getElementById(`cb_${cat}_${idx}`)?.checked;
+        const selectedBlobs = state.photos[`${cat}|${idx}`] || [];
+        if(checked) done++;
+        if(req.has(idx) && selectedBlobs.length===0) reqMissing++;
+        items.push({ i:idx, text:arr[i], checked, photos:[] });
+      }
       if(done<arr.length) errs.push(`• ${cat}: semua item harus dicentang (${done}/${arr.length}).`);
       if(reqMissing>0) errs.push(`• ${cat}: kurang foto wajib (${reqMissing} item).`);
-      payload[cat]={done,total:arr.length};
+      detailByCategory[cat] = { done, total:arr.length, items };
     }
     if(errs.length){ alert("Tidak bisa submit:\n"+errs.join("\n")); return; }
 
-    // Upload foto ke Storage (jika supabase tersedia), bangun peta uploads
+    // Upload foto ke Storage
     let uploadedMap={};
     if(supabase){
       for(const key of Object.keys(state.photos)){
-        const [cat, idx]=key.split("|"); const blobs=state.photos[key]; const uploads=[];
+        const [cat, idx]=key.split("|");
+        const blobs=state.photos[key];
+        const uploads=[];
         for(const blob of blobs){
           const path=`${encodeURIComponent(name)}/${date}/${encodeURIComponent(cat)}/${idx}-${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
           const { error } = await supabase.storage.from(BUCKET).upload(path, blob, { contentType:"image/jpeg", upsert:false });
@@ -261,22 +251,39 @@
       }
     }
 
+    // Isi URL foto per item
+    for(const cat of Object.keys(detailByCategory)){
+      if(!state.enabledCats.has(cat)) continue;
+      const det=detailByCategory[cat];
+      det.items.forEach(it=>{
+        const ups=uploadedMap[`${cat}|${it.i}`]||[];
+        it.photos = ups.map(u=>u.url);
+      });
+    }
+
     // Simpan metadata per kategori
     if(supabase){
       const rows=[];
       for(const cat of Object.keys(CHECKLIST)){
         if(!state.enabledCats.has(cat)) continue;
-        const arr=CHECKLIST[cat]; const done=payload[cat].done; const total=payload[cat].total;
-        const req=new Set(REQUIRED_PHOTO_IDX[cat]||[]); let miss=0; const ups=[];
-        for(let i=1;i<=arr.length;i++){ if(req.has(i)){ const u=uploadedMap[`${cat}|${i}`]||[]; if(u.length===0) miss++; } (uploadedMap[`${cat}|${i}`]||[]).forEach(x=>ups.push(x)); }
-        rows.push({ user:name, date, category:cat, total, done, missing_photos:miss, uploads:ups, payload:{ checks:"all-true", required:[...req] } });
+        const arr=CHECKLIST[cat];
+        const det=detailByCategory[cat];
+        const req=new Set(REQUIRED_PHOTO_IDX[cat]||[]);
+        let miss=0; const ups=[];
+        for(let i=1;i<=arr.length;i++){
+          if(req.has(i)){
+            const u=uploadedMap[`${cat}|${i}`]||[];
+            if(u.length===0) miss++;
+          }
+          (uploadedMap[`${cat}|${i}`]||[]).forEach(x=>ups.push(x));
+        }
+        rows.push({ user:name, date, category:cat, total:det.total, done:det.done, missing_photos:miss, uploads:ups, payload:det });
       }
       const { error } = await supabase.from("checks").insert(rows);
       if(error){ alert("Gagal menyimpan metadata: "+error.message); return; }
       alert("✅ Tersimpan ke server.");
     }else{
-      // fallback export lokal
-      const data={ meta:{ exportedAt:new Date().toISOString(), app:"v6.1.1-fallback" }, user:name, date };
+      const data={ meta:{ exportedAt:new Date().toISOString(), app:"v6.1.2-fallback" }, user:name, date, detailByCategory };
       const blob=new Blob([JSON.stringify(data)],{type:"application/json"});
       const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=`fallback_${name}_${date}.json`; a.click();
       alert("⚠️ Supabase belum diset. Data diexport lokal.");
@@ -297,11 +304,55 @@
     if(rows.length===0){ box.innerHTML='<div class="muted">Tidak ada data.</div>'; return; }
     rows.forEach(r=>{
       const div=document.createElement("div"); div.className="kartu";
-      div.innerHTML=`<h4>${r.user} — ${r.date} — ${r.category}</h4><div class="muted">Progress: ${r.done}/${r.total} · Foto wajib kurang: ${r.missing_photos}</div>`;
+      div.innerHTML=`
+        <h4>${r.user} — ${r.date} — ${r.category}</h4>
+        <div class="muted">Progress: ${r.done}/${r.total} · Foto wajib kurang: ${r.missing_photos}</div>
+        <div class="photos-row"></div>
+        <div style="margin-top:8px;">
+          <button class="btn small" data-view="detail">Lihat Detail Item</button>
+        </div>
+      `;
       const photos=document.createElement("div"); photos.className="photos-row";
       (r.uploads||[]).forEach(u=>{ const img=document.createElement("img"); img.className="thumb"; img.src=u.url; img.title=`Item ${u.item}`; photos.appendChild(img); });
-      div.appendChild(photos); box.appendChild(div);
+      div.querySelector(".photos-row").replaceWith(photos);
+      div.querySelector('[data-view="detail"]').onclick=()=>openDetailModal(r);
+      box.appendChild(div);
     });
+  }
+
+  function openDetailModal(r){
+    const payload=r.payload||{}; const items=payload.items||[];
+    const overlay=document.createElement("div"); overlay.className="overlay";
+    const modal=document.createElement("div"); modal.className="modal";
+    modal.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <h3 style="margin:0">Detail Checklist — ${r.category} (${r.user}, ${r.date})</h3>
+        <button class="btn ghost small" id="close-modal">Tutup</button>
+      </div>
+      <table class="table">
+        <thead><tr><th>No</th><th>Nama Item</th><th>Checked</th><th>Foto</th></tr></thead>
+        <tbody id="detail-body"></tbody>
+      </table>
+    `;
+    const tbody=modal.querySelector("#detail-body");
+    if(items.length===0){
+      const tr=document.createElement("tr"); const td=document.createElement("td"); td.colSpan=4; td.innerHTML='<span class="muted">Tidak ada data item di payload.</span>'; tr.appendChild(td); tbody.appendChild(tr);
+    }else{
+      items.forEach(it=>{
+        const tr=document.createElement("tr");
+        const tdNo=document.createElement("td"); tdNo.textContent=it.i;
+        const tdText=document.createElement("td"); tdText.textContent=it.text;
+        const tdChk=document.createElement("td"); tdChk.textContent=it.checked?"✅":"❌";
+        const tdFoto=document.createElement("td"); const row=document.createElement("div"); row.className="photos-row";
+        (it.photos||[]).forEach(url=>{ const img=document.createElement("img"); img.className="thumb"; img.src=url; row.appendChild(img); });
+        tdFoto.appendChild(row);
+        tr.appendChild(tdNo); tr.appendChild(tdText); tr.appendChild(tdChk); tr.appendChild(tdFoto);
+        tbody.appendChild(tr);
+      });
+    }
+    overlay.appendChild(modal); document.body.appendChild(overlay);
+    modal.querySelector("#close-modal").onclick=()=>overlay.remove();
+    overlay.onclick=(e)=>{ if(e.target===overlay) overlay.remove(); };
   }
   </script>
 </body>
