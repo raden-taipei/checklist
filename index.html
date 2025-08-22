@@ -11,7 +11,7 @@
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    .container{max-width:1100px;margin:0 auto;padding:16px}
+    .container{max-width:1200px;margin:0 auto;padding:16px}
     header{display:flex;align-items:center;gap:12px;padding:12px 0 4px}
     header h1{margin:0;font-size:1.4rem}
     header .sub{color:var(--muted)}
@@ -28,7 +28,7 @@
     .category header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
     .item{padding:8px 0;border-bottom:1px dashed var(--border)}
     .item:last-child{border-bottom:none}
-    .item-row{display:grid;align-items:center;gap:8px;grid-template-columns:28px 28px 1fr minmax(80px,auto)}
+    .item-row{display:grid;align-items:center;gap:8px;grid-template-columns:28px 28px 1fr minmax(120px,auto)}
     .item-photos{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
     .thumb{height:58px;border-radius:8px;border:1px solid var(--border);cursor:pointer}
     label.file-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;border:1px solid var(--border);background:#0d2f1d;cursor:pointer}
@@ -89,6 +89,24 @@ label.file-btn{border-color:#1e3d2a}
   .logo{width:56px;height:56px}
   header.brand h1{font-size:1.2rem}
 }
+
+/* izinkan kolom teks menyusut */
+.item-row {
+  grid-template-columns: 28px 28px minmax(0, 1fr) max-content;
+}
+
+/* pastikan elemen kolom teks boleh lebih kecil dari min-content */
+.item-row > div:nth-child(3) {
+  min-width: 0;
+  overflow-wrap: anywhere; /* bantu pecah kata panjang/berdelimiter */
+}
+
+/* jaga tombol tetap ringkas */
+label.file-btn { white-space: nowrap; }
+
+/* opsional: potong sisa bayangan/artefak jika ada */
+.category.card { overflow: hidden; }
+
 
   </style>
 
