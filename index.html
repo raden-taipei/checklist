@@ -8,6 +8,7 @@
     :root{
       --bg:#0a2b1a; --card:#0f3521; --muted:#a6c2b5; --text:#f4f7f5;
       --accent:#d4b36a; --ok:#32d583; --warn:#f7a23a; --bad:#ef4444; --border:#244a36; --shadow:0 6px 30px rgba(0,0,0,.25);
+      --ctrl-col-w: 76px;            /* lebar kolom kontrol (Upload / input teks) */
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -28,7 +29,12 @@
     .category header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
     .item{padding:8px 0;border-bottom:1px dashed var(--border)}
     .item:last-child{border-bottom:none}
-    .item-row{display:grid;align-items:center;gap:8px;grid-template-columns:28px 28px 1fr minmax(120px,auto)}
+    .item-row{
+      display:grid;
+      align-items:center;
+      gap:8px;
+      grid-template-columns: 28px 28px minmax(0,1fr) var(--ctrl-col-w);
+    }
     .item-photos{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
     .thumb{height:58px;border-radius:8px;border:1px solid var(--border);cursor:pointer}
     label.file-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;border:1px solid var(--border);background:#0d2f1d;cursor:pointer}
@@ -76,7 +82,6 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="password"]:focus
 .card{backdrop-filter:saturate(135%) blur(2px)}
 
 /* Items */
-.item-row{grid-template-columns:28px 28px 1fr minmax(140px,auto)}
 label.file-btn{border-color:#1e3d2a}
 .badge.warn{font-weight:700}
 
@@ -88,11 +93,6 @@ label.file-btn{border-color:#1e3d2a}
 @media (max-width:480px){
   .logo{width:56px;height:56px}
   header.brand h1{font-size:1.2rem}
-}
-
-/* izinkan kolom teks menyusut */
-.item-row {
-  grid-template-columns: 28px 28px minmax(0, 1fr) max-content;
 }
 
 /* pastikan elemen kolom teks boleh lebih kecil dari min-content */
@@ -324,7 +324,7 @@ label.file-btn { white-space: nowrap; }
           const txt = document.createElement("input");
           txt.type = "text";
           txt.id = `txt_${cat}_${idx}`.replace(/\s+/g, "_");
-          txt.placeholder = "Isi keterangan...";
+          txt.placeholder = "Isi nama";
           upWrap.appendChild(txt);
           // kolom foto/preview tidak diperlukan untuk item teks
         } else {
