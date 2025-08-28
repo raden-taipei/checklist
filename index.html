@@ -227,12 +227,22 @@ label.file-btn { white-space: nowrap; }
   const BUCKET = "photos";                                      // pastikan ada bucket public 'photos'
   const ADMIN_PIN = "raden1234";                                     // ganti PIN admin di sini
 
+  const TEXT_INPUT_IDX = {
+    "Hot Kitchen": [15],
+    "Pastry": [17]
+  };
+
   const CHECKLIST = {
     "General": ["AC","Kulkas Freezer Utama","Komputer Mati","Laptop Mati","Rak Lemari Kuker Tertutup","Pintu Office Tertutup","Lampu dan Pintu Store","Sampah Office","Jendela Depan Toko Terkunci","Sampah Kulit Pisang masuk Freezer","Pintu Depan Utama","Pintu Garasi Depan Utama Tertutup","Semua Lantai Area Tersapu& Terpel","Semua Lantai Office& Store Bersih","Area Toko (Meja& Lantai) Rapi"],
-    "Hot Kitchen": ["Keran Gas Utama/ Main Valve","Exhaust Tombol ON/ OFF","Steamer Besar","Steamer Kecil","Kompor Gas","Tong Sampah Hot Kitchen","Selokan Hot Kitchen","Saringan Hot Kitchen Wasfatel (per 2 Hari)","Sampah Toilet Wanita","Jendela Toilet Wanita","Pintu Toilet Wanita","Kompor Bakar Depan Oven Besar","Kulkas Hot Kitchen","Mesin Cuci di Toilet Wanita"],
-    "Pastry": ["Oven Besar& Oven Kecil","Mesin Cap Label Kuker","Mesin Giling Kulit Bolen","Saringan Wastafel Cuci Piring (Per 2 Hari)","Mixer Besar Pastry","Mixer Kecil Pastry","Saringan Tepung","Kulkas Pastry","Tong Sampah Besar (Wastafel)","Tong Sampah Kecil","Sampah Toilet Pria","Keran Gas Manual (Toilet Pria)","Jendela Kamar Mandi Pria","Pintu Kamar Mandi Pria","Microwave","AC Dapur"]
+    "Hot Kitchen": ["Keran Gas Utama/ Main Valve","Exhaust Tombol ON/ OFF","Steamer Besar","Steamer Kecil","Kompor Gas","Tong Sampah Hot Kitchen","Selokan Hot Kitchen","Saringan Hot Kitchen Wasfatel (per 2 Hari)","Sampah Toilet Wanita","Jendela Toilet Wanita","Pintu Toilet Wanita","Kompor Bakar Depan Oven Besar","Kulkas Hot Kitchen","Mesin Cuci di Toilet Wanita","Piket Saringan Wastafel"],
+    "Pastry": ["Oven Besar& Oven Kecil","Mesin Cap Label Kuker","Mesin Giling Kulit Bolen","Saringan Wastafel Cuci Piring (Per 2 Hari)","Mixer Besar Pastry","Mixer Kecil Pastry","Saringan Tepung","Kulkas Pastry","Tong Sampah Besar (Wastafel)","Tong Sampah Kecil","Sampah Toilet Pria","Keran Gas Manual (Toilet Pria)","Jendela Kamar Mandi Pria","Pintu Kamar Mandi Pria","Microwave","AC Dapur","Piket Saringan Wastafel"]
   };
-  const REQUIRED_PHOTO_IDX = { "General":[1,2], "Hot Kitchen":[1,2, 5,13], "Pastry":[8,12,16] };
+  const REQUIRED_PHOTO_IDX = { "General":[1,2], "Hot Kitchen":[1,2,5,13], "Pastry":[8,12,16] };
+  // Item yang WAJIB teks
+  const REQUIRED_TEXT_IDX = {
+    "Hot Kitchen": [15],
+    "Pastry": [17]
+  };
 
   const supabase = (SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length>10) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
@@ -295,6 +305,7 @@ label.file-btn { white-space: nowrap; }
       if(!state.enabledCats.has(cat)) return;
       const card = document.createElement("section"); card.className="category card";
       const head = document.createElement("header"); head.innerHTML = `<h3>${cat}</h3>`; card.appendChild(head);
+
       CHECKLIST[cat].forEach((name,i)=>{
         const idx=i+1;
         const row=document.createElement("div"); row.className="item";
@@ -302,18 +313,78 @@ label.file-btn { white-space: nowrap; }
         const cbWrap=document.createElement("div"); const cb=document.createElement("input"); cb.type="checkbox"; cb.id=`cb_${cat}_${idx}`; cbWrap.appendChild(cb);
         const num=document.createElement("div"); num.textContent=idx; num.style.fontWeight="800";
         const nm=document.createElement("div"); nm.textContent=name;
-        const upWrap=document.createElement("div"); const fileId=`file_${cat}_${idx}`.replace(/\s+/g,'_');
-        const input=document.createElement("input"); input.type="file"; input.accept="image/*"; input.multiple=true; input.id=fileId; input.capture="environment";
-        const label=document.createElement("label"); label.className="file-btn"; label.htmlFor=fileId; label.textContent="Upload";
-        upWrap.appendChild(label); upWrap.appendChild(input);
-        inner.appendChild(cbWrap); inner.appendChild(num); inner.appendChild(nm); inner.appendChild(upWrap); row.appendChild(inner);
-        const photosDiv=document.createElement("div"); photosDiv.className="item-photos"; row.appendChild(photosDiv);
-        input.onchange=async ()=>{
-          const files=[...input.files]; const out=[];
-          for(const f of files){ const blob=await compressImage(f,1600,0.85); const url=URL.createObjectURL(blob); const img=document.createElement("img"); img.className="thumb"; img.src=url; photosDiv.appendChild(img); out.push(blob); }
-          state.photos[`${cat}|${idx}`]=(state.photos[`${cat}|${idx}`]||[]).concat(out); input.value="";
-        };
-        if((REQUIRED_PHOTO_IDX[cat]||[]).includes(idx)){ const badge=document.createElement("span"); badge.className="badge warn"; badge.textContent="foto wajib"; row.appendChild(badge); }
+
+        const upWrap = document.createElement("div");
+        const isText = (TEXT_INPUT_IDX[cat] || []).includes(idx);
+        const reqTextSet  = new Set(REQUIRED_TEXT_IDX[cat] || []);
+        const reqPhotoSet = new Set(REQUIRED_PHOTO_IDX[cat] || []);
+
+        if (isText) {
+          // >>> VARIAN INPUT TEKS
+          const txt = document.createElement("input");
+          txt.type = "text";
+          txt.id = `txt_${cat}_${idx}`.replace(/\s+/g, "_");
+          txt.placeholder = "Isi keterangan...";
+          upWrap.appendChild(txt);
+          // kolom foto/preview tidak diperlukan untuk item teks
+        } else {
+          // >>> VARIAN UPLOAD (seperti semula)
+          const fileId = `file_${cat}_${idx}`.replace(/\s+/g, "_");
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "image/*";
+          input.multiple = true;
+          input.id = fileId;
+
+          const label = document.createElement("label");
+          label.className = "file-btn";
+          label.htmlFor = fileId;
+          label.textContent = "Upload";
+
+          upWrap.appendChild(label);
+          upWrap.appendChild(input);
+
+          // preview foto
+          const photosDiv = document.createElement("div");
+          photosDiv.className = "item-photos";
+          row.appendChild(photosDiv);
+
+          // perbaiki juga typo handler: gunakan spread yang benar
+          input.onchange = async () => {
+            const files=[...input.files]; const out=[]; // <= perbaikan
+            for (const f of files) {
+              const blob = await compressImage(f, 1600, 0.85);
+              const url = URL.createObjectURL(blob);
+              const img = document.createElement("img");
+              img.className = "thumb";
+              img.src = url;
+              photosDiv.appendChild(img);
+              out.push(blob);
+            }
+            state.photos[`${cat}|${idx}`] = (state.photos[`${cat}|${idx}`] || []).concat(out);
+            input.value = "";
+          };
+        }
+
+        inner.appendChild(cbWrap);
+        inner.appendChild(num);
+        inner.appendChild(nm);
+        inner.appendChild(upWrap);
+        row.appendChild(inner);
+
+        // Tampilkan badge "foto wajib" HANYA untuk item yang bukan teks
+        if (isText && reqTextSet.has(idx)) {
+          const badge = document.createElement("span");
+          badge.className = "badge warn";
+          badge.textContent = "teks wajib";
+          row.appendChild(badge);
+        } else if (!isText && reqPhotoSet.has(idx)) {
+          const badge = document.createElement("span");
+          badge.className = "badge warn";
+          badge.textContent = "foto wajib";
+          row.appendChild(badge);
+        }
+
         card.appendChild(row);
       });
       wrap.appendChild(card);
@@ -434,18 +505,30 @@ label.file-btn { white-space: nowrap; }
       if(!state.enabledCats.has(cat)) continue;
       if (existedCats.has(cat)) continue; // <<< LEWATI kategori yang sudah ada
       const arr=CHECKLIST[cat];
-      let done=0; const req=new Set(REQUIRED_PHOTO_IDX[cat]||[]); let reqMissing=0;
+      let done = 0;
+      const reqPhotos = new Set(REQUIRED_PHOTO_IDX[cat] || []);
+      const reqTexts  = new Set(REQUIRED_TEXT_IDX[cat]  || []);
+      let missPhoto = 0, missText = 0
       const items=[];
       for(let i=0;i<arr.length;i++){
         const idx=i+1;
         const checked=!!document.getElementById(`cb_${cat}_${idx}`)?.checked;
         const selectedBlobs = state.photos[`${cat}|${idx}`] || [];
+        const isText = (TEXT_INPUT_IDX[cat] || []).includes(idx);
+        const txtId = `txt_${cat}_${idx}`.replace(/\s+/g, "_");
+        const note  = isText ? (document.getElementById(txtId)?.value || "") : "";
         if(checked) done++;
-        if(req.has(idx) && selectedBlobs.length===0) reqMissing++;
-        items.push({ i:idx, text:arr[i], checked, photos:[] });
+        if (isText) {
+          if (reqTexts.has(idx) && note.trim() === "") missText++;
+        } else {
+          const selectedBlobs = state.photos[`${cat}|${idx}`] || [];
+          if (reqPhotos.has(idx) && selectedBlobs.length === 0) missPhoto++;
+        }
+        items.push({ i: idx, text: arr[i], checked, photos: [], note });
       }
-      if(done<arr.length) errs.push(`• ${cat}: semua item harus dicentang (${done}/${arr.length}).`);
-      if(reqMissing>0) errs.push(`• ${cat}: kurang foto wajib (${reqMissing} item).`);
+      if (done < arr.length) errs.push(`• ${cat}: semua item harus dicentang (${done}/${arr.length}).`);
+      if (missPhoto > 0)     errs.push(`• ${cat}: kurang foto wajib (${missPhoto} item).`);
+      if (missText  > 0)     errs.push(`• ${cat}: kurang teks wajib (${missText} item).`);
       detailByCategory[cat] = { done, total:arr.length, items };
     }
     if(errs.length){ alert("Tidak bisa submit:\n"+errs.join("\n")); return; }
@@ -493,16 +576,39 @@ label.file-btn { white-space: nowrap; }
         if (existedCats.has(cat)) continue; // <<< cegah duplikasi di level insert
         const arr=CHECKLIST[cat];
         const det=detailByCategory[cat];
-        const req=new Set(REQUIRED_PHOTO_IDX[cat]||[]);
-        let miss=0; const ups=[];
-        for(let i=1;i<=arr.length;i++){
-          if(req.has(i)){
-            const u=uploadedMap[`${cat}|${i}`]||[];
-            if(u.length===0) miss++;
+        const reqPhoto = new Set(REQUIRED_PHOTO_IDX[cat] || []);
+        const reqText  = new Set(REQUIRED_TEXT_IDX[cat]  || []);
+        let missPhoto = 0, missText = 0;
+        const ups = [];
+
+        // hitung missPhoto dari uploadedMap
+        for (let i = 1; i <= arr.length; i++) {
+          if (reqPhoto.has(i)) {
+            const u = uploadedMap[`${cat}|${i}`] || [];
+            if (u.length === 0) missPhoto++;
           }
-          (uploadedMap[`${cat}|${i}`]||[]).forEach(x=>ups.push(x));
+          (uploadedMap[`${cat}|${i}`] || []).forEach(x => ups.push(x));
         }
-        rows.push({ user:name, date, category:cat, total:det.total, done:det.done, missing_photos:miss, uploads:ups, payload:det });
+
+        // hitung missText dari det.items (note kosong pada item teks yang wajib)
+        (det.items || []).forEach(it => {
+          const isText = (TEXT_INPUT_IDX[cat] || []).includes(it.i);
+          if (isText && reqText.has(it.i)) {
+            if (!String(it.note || "").trim()) missText++;
+          }
+        });
+
+        rows.push({
+          user: name,
+          date,
+          category: cat,
+          total: det.total,
+          done: det.done,
+          missing_photos: missPhoto,
+          missing_text:  missText,
+          uploads: ups,
+          payload: det
+        });
       }
       const { error } = await supabase.from("checks").insert(rows);
       if(error){ alert("Gagal menyimpan metadata: "+error.message); return; }
@@ -574,7 +680,12 @@ label.file-btn { white-space: nowrap; }
       const div=document.createElement("div"); div.className="kartu";div.dataset.date = r.date;div.dataset.category = r.category; // << tambah
       div.innerHTML=`
         <h4>${r.user} — ${r.date} — ${r.category}</h4>
-        <div class="muted">Progress: ${r.done}/${r.total} · Foto wajib kurang: ${r.missing_photos}</div>
+        <div class="muted">
+          Progress: ${r.done}/${r.total}
+          · Foto wajib kurang: ${r.missing_photos ?? 0}
+          · Teks wajib kurang: ${r.missing_text ?? 0}
+        </div>
+
         <div class="photos-row"></div>
         <div style="margin-top:8px;">
           <button class="btn small" data-view="detail">Lihat Detail Item</button>
@@ -602,7 +713,7 @@ label.file-btn { white-space: nowrap; }
         <button class="btn ghost small" id="close-modal">Tutup</button>
       </div>
       <table class="table">
-        <thead><tr><th>No</th><th>Nama Item</th><th>Checked</th><th>Foto</th></tr></thead>
+        <thead><tr><th>No</th><th>Nama Item</th><th>Checked</th><th>Teks</th><th>Foto</th></tr></thead>
         <tbody id="detail-body"></tbody>
       </table>
     `;
@@ -615,10 +726,11 @@ label.file-btn { white-space: nowrap; }
         const tdNo=document.createElement("td"); tdNo.textContent=it.i;
         const tdText=document.createElement("td"); tdText.textContent=it.text;
         const tdChk=document.createElement("td"); tdChk.textContent=it.checked?"✅":"❌";
+        const tdNote = document.createElement("td"); tdNote.textContent = (it.note && String(it.note).trim()) ? it.note : "—";
         const tdFoto=document.createElement("td"); const row=document.createElement("div"); row.className="photos-row";
         (it.photos||[]).forEach(url=>{ const img=document.createElement("img"); img.className="thumb"; img.src=url; row.appendChild(img); });
         tdFoto.appendChild(row);
-        tr.appendChild(tdNo); tr.appendChild(tdText); tr.appendChild(tdChk); tr.appendChild(tdFoto);
+        tr.appendChild(tdNo); tr.appendChild(tdText); tr.appendChild(tdChk); tr.appendChild(tdNote); tr.appendChild(tdFoto);
         tbody.appendChild(tr);
       });
     }
