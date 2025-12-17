@@ -196,7 +196,6 @@ label.file-btn { white-space: nowrap; }
       <div class="card" style="margin-top:10px">
         <h3 style="margin:6px 0">Pilih kategori yang diisi hari ini</h3>
         <div id="cat-toggles" class="toggles"></div>
-        <!-- <h4 style="margin:6px 0">*) Tanda "*": Diisi hanya hari Minggu</h4> -->
       </div>
       <div id="cats" class="grid"></div>
       <div class="row">
@@ -236,8 +235,7 @@ label.file-btn { white-space: nowrap; }
   const CHECKLIST = {
     "General": ["AC","Kulkas Freezer Utama","Komputer Mati","Laptop Mati","Rak Lemari Kuker Tertutup","Pintu Office Tertutup","Lampu dan Pintu Store","Sampah Office","Jendela Depan Toko Terkunci","Sampah Kulit Pisang masuk Freezer","Pintu Depan Utama","Pintu Garasi Depan Utama Tertutup","Semua Lantai Area Tersapu& Terpel","Semua Lantai Office& Store Bersih","Area Toko (Meja& Lantai) Rapi"],
     "Hot Kitchen": ["Keran Gas Utama/ Gas Negara (Dekat Steamer)","Keran Gas Swasta (Depan Pintu Toilet Cewek)","Exhaust Tombol ON/ OFF","Steamer Besar","Steamer Kecil","Kompor Gas","Tong Sampah Hot Kitchen","Selokan Hot Kitchen","Saringan Hot Kitchen Wasfatel (per 2 Hari)","Sampah Toilet Wanita","Jendela Toilet Wanita","Pintu Toilet Wanita","Kompor Bakar Depan Oven Besar","Kulkas Hot Kitchen","Mesin Cuci di Toilet Wanita","Piket Saringan Wastafel"],
-    "Pastry": ["Oven Besar& Oven Kecil","Mesin Cap Label Kuker","Mesin Giling Kulit Bolen","Saringan Wastafel Cuci Piring (Per 2 Hari)","Mixer Besar Pastry","Mixer Kecil Pastry","Saringan Tepung","Kulkas Pastry","Tong Sampah Besar (Wastafel)","Tong Sampah Kecil","Sampah Toilet Pria","Keran Gas Manual (Toilet Pria)","Jendela Kamar Mandi Pria","Pintu Kamar Mandi Pria","Microwave","AC Dapur","Piket Saringan Wastafel"],
-    "Minggu": ["Bahan Makanan Rak (di bawah mesin bolen)", "Kotak dan meja mesin 攪拌機 pengaduk", "Kotak dan meja mesin penyaring", "Rak diatas meja potong kulit bolen", "Rak di atas mesin pengaduk", "Rak atas bahan makanan di atas microwave", "Rak atas tempat pencucian piring", "Laci isi tepung", "Lap Microwave", "Kulkas  1", "Kulkas pastry 2", "Lap Dispenser", "Satuin tusuk gigi bekas", "Lap RAK LOYANG 1", "Lap RAK LOYANG 2", "Meja bawah penyimpanan dekat oven -bahan martabak", "Meja penyimpanan selai coklat (rapiin dan kardus ga penting direcycle)", "Meja penyimpanan tengah 2", "Meja penyimpanan tengah 3 (beras)", "Meja dibawah kompor martabak (sikat bekas adonan)", "Meja dibawah kompor risoles (sikat bekas adonan)", "Meja dorong 1 (Jangan ada remah remah)", "Meja dorong 2 (Jangan ada remah remah)", "Sela lantai samping area martabak, oven-disikat", "Lantai tempat sampah disikat", "Lantai belakang oven", "Kotak sampah bersihkan dan ganti plastik", "Ruang marinasi di bawah oven disikat", "Sikat saringan grease trap - Pastry", "Tempat cuci piring 1", "Tempat cuci piring 2", "Kulkas hot kitchen 1", "Kulkas hot kitchen 2", "Kulkas hot kitchen 3", "Langit langit exhaust (akhir bulan)", "Steamer 1", "Steamer 2", "Penggorengan 1", "Penggorengan 2", "Kompor", "Saringan grease trap", "Meja bawah penyimpanan alat dan bahan", "Kotak bawah meja dilap", "Selokan", "Rapikan tempat penyimpanan barang", "Bersihin dan lap tempat sepatu", "Rapiin kotak makanan", "Rapiin kardus kardus", "Periksa pisang jika ada", "Bersihin Tempat sepatu", "Lap dinding kulkas frozen utama", "LAP dan BERESIN MEJA KANTOR", "SIKAT DEPAN"]
+    "Pastry": ["Oven Besar& Oven Kecil","Mesin Cap Label Kuker","Mesin Giling Kulit Bolen","Saringan Wastafel Cuci Piring (Per 2 Hari)","Mixer Besar Pastry","Mixer Kecil Pastry","Saringan Tepung","Kulkas Pastry","Tong Sampah Besar (Wastafel)","Tong Sampah Kecil","Sampah Toilet Pria","Keran Gas Manual (Toilet Pria)","Jendela Kamar Mandi Pria","Pintu Kamar Mandi Pria","Microwave","AC Dapur","Piket Saringan Wastafel"]
   };
   const REQUIRED_PHOTO_IDX = { "General":[1,2], "Hot Kitchen":[1,2,3,6,14], "Pastry":[8,12,16] };
   // Item yang WAJIB teks
@@ -335,7 +333,7 @@ label.file-btn { white-space: nowrap; }
           const input = document.createElement("input");
           input.type = "file";
           input.accept = "image/*";
-          input.capture="environment"
+          // input.capture="environment"
           input.multiple = true;
           input.id = fileId;
 
