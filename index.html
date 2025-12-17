@@ -246,7 +246,17 @@ label.file-btn { white-space: nowrap; }
     "Pastry": [17]
   };
 
-  const supabase = (SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length>10) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  let supabase = null;
+  try {
+    if (window.supabase?.createClient && SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length > 10) {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else {
+      console.warn("Supabase belum ter-load / config belum lengkap.");
+    }
+  } catch (e) {
+    console.warn("Gagal init Supabase:", e);
+  }
+
 
   const elAuth = document.getElementById("auth");
   const elUser = document.getElementById("user-app");
